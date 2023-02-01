@@ -1,4 +1,4 @@
-import { IRawGrammar, IRawTheme, IRawThemeSetting } from 'vscode-textmate'
+import { IGrammar, IRawTheme } from 'vscode-textmate'
 import { Lang } from './languages'
 import { IThemedToken } from './themedTokenizer'
 import { Theme } from './themes'
@@ -6,13 +6,13 @@ import { Theme } from './themes'
 export interface HighlighterOptions {
   /**
    * The theme to load upfront.
+   *
+   * Default to: 'nord'
    */
   theme?: IThemeRegistration
 
   /**
    * A list of themes to load upfront.
-   *
-   * Default to: `['dark-plus', 'light-plus']`
    */
   themes?: IThemeRegistration[]
 
@@ -39,14 +39,14 @@ export interface Highlighter {
     code: string,
     lang?: StringLiteralUnion<Lang>,
     theme?: StringLiteralUnion<Theme>,
-    options?: HtmlOptions
+    options?: CodeToHtmlOptions
   ): string
 
   /**
    * Convert code to HTML tokens.
    * `lang` and `theme` must have been loaded.
    */
-  codeToHtml(code: string, options?: HtmlOptions): string
+  codeToHtml(code: string, options?: CodeToHtmlOptions): string
 
   /**
    * Convert code to themed tokens for custom processing.
@@ -60,6 +60,20 @@ export interface Highlighter {
     theme?: StringLiteralUnion<Theme>,
     options?: ThemedTokenizerOptions
   ): IThemedToken[][]
+
+  /**
+   * Convert ansi-escaped text to HTML tokens.
+   * `theme` must have been loaded.
+   */
+  ansiToHtml(ansi: string, options?: AnsiToHtmlOptions): string
+
+  /**
+   * Convert ansi-escaped text to themed tokens for custom processing.
+   * `theme` must have been loaded.
+   * You may customize the bundled HTML / SVG renderer or write your own
+   * renderer for another render target.
+   */
+  ansiToThemedTokens(ansi: string, theme?: StringLiteralUnion<Theme>): IThemedToken[][]
 
   /**
    * Get the loaded theme
@@ -114,6 +128,11 @@ export interface IHighlighterPaths {
    * @default 'languages/'
    */
   languages?: string
+
+  /**
+   * @default 'dist/'
+   */
+  wasm?: string
 }
 
 export type ILanguageRegistration = {
@@ -127,16 +146,12 @@ export type ILanguageRegistration = {
    * languages for each parent language.
    */
   embeddedLangs?: Lang[]
-} & (
-  | {
-      path: string
-      grammar?: IRawGrammar
-    }
-  | {
-      path?: string
-      grammar: IRawGrammar
-    }
-)
+  balancedBracketSelectors?: string[]
+  unbalancedBracketSelectors?: string[]
+} & {
+  path: string
+  grammar?: IGrammar
+}
 
 export type IThemeRegistration = IShikiTheme | StringLiteralUnion<Theme>
 
@@ -154,7 +169,7 @@ export interface IShikiTheme extends IRawTheme {
   /**
    * @description tokenColors of the theme file
    */
-  settings: IRawThemeSetting[]
+  settings: any[]
 
   /**
    * @description text default foreground color
@@ -185,17 +200,23 @@ export interface IShikiTheme extends IRawTheme {
  */
 export type StringLiteralUnion<T extends U, U = string> = T | (U & {})
 
-export interface HtmlOptions {
+export interface CodeToHtmlOptions {
   lang?: StringLiteralUnion<Lang>
   theme?: StringLiteralUnion<Theme>
   lineOptions?: LineOption[]
 }
+export interface AnsiToHtmlOptions {
+  theme?: StringLiteralUnion<Theme>
+  lineOptions?: LineOption[]
+}
+
 export interface HtmlRendererOptions {
   langId?: string
   fg?: string
   bg?: string
   lineOptions?: LineOption[]
   elements?: ElementsOptions
+  themeName?: string
 }
 
 export interface LineOption {
