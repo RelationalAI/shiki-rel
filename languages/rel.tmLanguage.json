@@ -1,193 +1,78 @@
 {
-  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "name": "Rel",
+  "scopeName": "source.rel",
+  "fileTypes": [
+    "rel"
+  ],
+  "uuid": "af071fce-5b0d-4d0c-90a7-3a515d00b63f",
   "patterns": [
     {
-      "include": "#strings"
+      "include": "#comments"
     },
     {
-      "include": "#comment"
+      "include": "#docstrings"
     },
     {
-      "include": "#single-line-comment-consuming-line-ending"
-    },
-    {
-      "include": "#deprecated-temporary"
-    },
-    {
-      "include": "#operators"
-    },
-    {
-      "include": "#symbols"
-    },
-    {
-      "include": "#keywords"
-    },
-    {
-      "include": "#otherkeywords"
-    },
-    {
-      "include": "#types"
-    },
-    {
-      "include": "#constants"
-    },
-    {
-      "include": "#special-relations"
+      "include": "#declarations"
     }
   ],
   "repository": {
-    "strings": {
-      "name": "string.quoted.double.rel",
-      "begin": "\"",
-      "end": "\"",
+    "declarations": {
       "patterns": [
         {
-          "name": "constant.character.escape.rel",
-          "match": "\\\\."
+          "include": "#keywords"
         },
         {
-          "include": "#string_percent_sign_interpolate"
+          "include": "#annotations"
+        },
+        {
+          "include": "#operators"
+        },
+        {
+          "include": "#stdlib"
+        },
+        {
+          "include": "#types"
+        },
+        {
+          "include": "#constants"
+        },
+        {
+          "include": "#special-relations"
+        },
+        {
+          "include": "#symbols"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#characters"
+        },
+        {
+          "include": "#numbers"
         }
       ]
     },
-    "string_percent_sign_interpolate": {
+    "comments": {
       "patterns": [
         {
-          "begin": "%\\(",
-          "end": "\\)",
-          "name": "variable.interpolation.rel",
-          "patterns": [
-            {
-              "include": "$self"
-            }
-          ]
+          "name": "comment.block",
+          "begin": "/\\*",
+          "end": "\\*/"
+        },
+        {
+          "name": "comment.line.double-slash",
+          "match": "//.*"
         }
       ]
     },
-    "comment": {
+    "docstrings": {
       "patterns": [
         {
-          "name": "comment.block.documentation.rel",
-          "begin": "/\\*\\*(?!/)",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.definition.comment.rel"
-            }
-          },
-          "end": "\\*/",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.definition.comment.rel"
-            }
-          },
-          "patterns": [
-            {
-              "include": "#docblock"
-            }
-          ]
-        },
-        {
-          "name": "comment.block.rel",
-          "begin": "(/\\*)(?:\\s*((@)internal)(?=\\s|(\\*/)))?",
-          "beginCaptures": {
-            "1": {
-              "name": "punctuation.definition.comment.rel"
-            },
-            "2": {
-              "name": "storage.type.internaldeclaration.rel"
-            },
-            "3": {
-              "name": "punctuation.decorator.internaldeclaration.rel"
-            }
-          },
-          "end": "\\*/",
-          "endCaptures": {
-            "0": {
-              "name": "punctuation.definition.comment.rel"
-            }
-          }
-        },
-        {
-          "name": "comment.block.documentation.rel",
-          "begin": "doc\"\"\"",
-          "end": "\"\"\""
-        },
-        {
-          "begin": "(^[ \\t]+)?((//)(?:\\s*((@)internal)(?=\\s|$))?)",
-          "beginCaptures": {
-            "1": {
-              "name": "punctuation.whitespace.comment.leading.rel"
-            },
-            "2": {
-              "name": "comment.line.double-slash.rel"
-            },
-            "3": {
-              "name": "punctuation.definition.comment.rel"
-            },
-            "4": {
-              "name": "storage.type.internaldeclaration.rel"
-            },
-            "5": {
-              "name": "punctuation.decorator.internaldeclaration.rel"
-            }
-          },
-          "end": "(?=$)",
-          "contentName": "comment.line.double-slash.rel"
-        }
-      ]
-    },
-    "single-line-comment-consuming-line-ending": {
-      "begin": "(^[ \\t]+)?((//)(?:\\s*((@)internal)(?=\\s|$))?)",
-      "beginCaptures": {
-        "1": {
-          "name": "punctuation.whitespace.comment.leading.rel"
-        },
-        "2": {
-          "name": "comment.line.double-slash.rel"
-        },
-        "3": {
-          "name": "punctuation.definition.comment.rel"
-        },
-        "4": {
-          "name": "storage.type.internaldeclaration.rel"
-        },
-        "5": {
-          "name": "punctuation.decorator.internaldeclaration.rel"
-        }
-      },
-      "end": "(?=^)",
-      "contentName": "comment.line.double-slash.rel"
-    },
-    "deprecated-temporary": {
-      "patterns": [
-        {
-          "name": "keyword.inspect.rel",
-          "match": "@inspect"
-        }
-      ]
-    },
-    "special-relations": {
-      "patterns": [
-        {
-          "name": "keyword.other.rel", 
-          "match": "(\\b(insert|delete|output|abort)\\b)"
-        }
-      ]
-    },
-    "operators": {
-      "patterns": [
-        {
-          "name": "keyword.other.rel",
-          "match": "(\\b(if|then|else|and|or|not|eq|neq|lt|lt_eq|gt|gt_eq)\\b)|(\\+|\\-|\\*|\\/|÷|\\^|\\%|\\=|\\!\\=|≠|\\<|\\<\\=|≤|\\>|\\>\\=|≥|\\&)|\\s+(end)"
-        }
-      ]
-    },
-    "symbols": {
-      "patterns": [
-        {
-          "name": "variable.parameter.rel",
-          "match": "(:[\\[_$[:alpha:]](\\]|[_$[:alnum:]]*))"
+          "name": "string.docstring",
+          "begin": "doc((?:\"{2})*\")",
+          "end": "\\1"
         }
       ]
     },
@@ -195,23 +80,35 @@
       "patterns": [
         {
           "name": "keyword.control.rel",
-          "match": "(\\b(def|entity|value|ic|forall|exists|∀|∃|return|module|^end)\\b)|(((\\<)?\\|(\\>)?)|∀|∃)"
+          "match": "\\b(module|end|as|with|use|def|bound|ic|if|then|else|forall|in|exists|for|from|where|type|value|entity)\\b"
         }
       ]
     },
-    "otherkeywords": {
+    "annotations": {
       "patterns": [
         {
-          "name": "keyword.other.rel",
-          "match": "\\s*(@inline)\\s*|\\s*(@auto_number)\\s*|\\s*(function)\\s|(\\b(implies|select|from|∈|where|for|in)\\b)|(((\\<)?\\|(\\>)?)|∈)"
+          "name": "support.function.annotation.rel",
+          "match": "\\s*(@outline)\\s*|\\s*(@inline)\\s*|\\s*(@ondemand)\\s*|\\s*(@function)\\s*|\\s*(@static)|=\\s*"
         }
       ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.rel",
+          "match": "(\\.|-|\\+|⊕|\\*|×|/|÷|%|∩|⊓|∪|⊔|!=|≠|<|<=|≤|>|>=|≥|≺|≻|≼|≽|⊂|⊃|⊆|⊇|[\\u2200-\\u22FF]|∧|∨|⇒|⇐|≡|⇔|≢|⇎|⊻|<:|:>|<\\+\\+|\\+\\+>|¬|→|←)|\\b(\\^|and|or|implies|iff|xor|not|∈|∃|∀)\\b"
+        }
+      ]
+    },
+    "stdlib": {
+      "name": "support.function.stdlib.rel",
+      "match": "\\b(ArgMax|ArgMin|Boolean|FixedDecimal_spread|Max|Min|^Char|^Date|^DateTime|^Day|^FilePos|^Hour|^Microsecond|^Millisecond|^Minute|^Missing|^Month|^Nanosecond|^Second|^Week|^Year|abs|acos|acosh|acot|add|approx_eq|approx_equal|argmax|argmin|arity|asin|asinh|atan|atan2|atanh|auto_number|average|bigint|bigint_int64_convert|bitwise_and|bitwise_left_shift|bitwise_not|bitwise_or|bitwise_right_shift|bitwise_unsigned_right_shift|bitwise_xor|boolean_and|boolean_false|boolean_not|boolean_or|boolean_true|bottom|byte|capture_group_by_index|capture_group_by_name|cart|cbrt|ceil|char|clamp|complement|concat|contains|cos|cosh|cot|count|csv_string|current_transaction_id|date_add|date_day|date_dayname|date_dayofquarter|date_dayofweek|date_dayofweekofmonth|date_dayofyear|date_daysinmonth|date_isleapyear|date_month|date_monthname|date_quarterofyear|date_subtract|date_week|date_year|dates_period_days|datetime_add|datetime_day|datetime_day_UTC|datetime_dayname|datetime_dayofquarter|datetime_dayofweek|datetime_dayofweekofmonth|datetime_dayofyear|datetime_daysinmonth|datetime_hour|datetime_hour_UTC|datetime_isleapyear|datetime_minute|datetime_minute_UTC|datetime_month|datetime_month_UTC|datetime_monthname|datetime_now|datetime_quarterofyear|datetime_second|datetime_subtract|datetime_to_nanoseconds|datetime_week|datetime_week_UTC|datetime_year|datetime_year_UTC|datetimes_period_milliseconds|decimal|decimal_bit_length|decimal_int_convert|decimal_precision|decode_base16|decode_base32|decode_base64|default_value|deg2rad|delve_date_daysinmonth|delve_period_days|denominator|describe|describe_full|despecialize|diff|disjoint|divide|docstring|domain|dot_join|double_metaphone|double_metaphone_alt|empty|encode_base16|encode_base32|encode_base64|ends_with|enumerate|epoch_milliseconds|eq|equal|erf|erfinv|escape_regex_metachars|export_csv|export_csv_row_wise|export_json|factorial|filepos|filepos_value|first|float|float64|float_int_convert|floor|floor_divide|floor_to_int|format_date|format_datetime|formula_card_est|frequency|full_relation_approx_equal|function|geometric_mean|gt|gt_eq|harmonic_mean|hash|hash128|hash_value_uint128_convert|haversine|if_then_else|int|int128|int64|int_float_convert|int_spread_by_even|int_spread_by_ratio|intersect|is_Day|is_Hour|is_Microsecond|is_Millisecond|is_Minute|is_Month|is_Nanosecond|is_Second|is_Week|is_Year|jacobian|json_string|last|left_override|levenshtein|like_match|lined_csv|load_binary|load_csv|load_csv_row_wise|load_json|load_json_general|load_jsonlines|load_jsonlines_general|load_parquet|log|log10|log_card_est|lowercase|lt|lt_eq|mae|max|max_k|mean|mean_normalization|median|metaphone|min|min_k|min_max_normalization|minimum|missing|mode|model_is_function|modulo|mse|multiply|murmurhash3f|murmurhash3f_with_seed|nanoseconds_to_datetime|natural_exp|natural_log|neq|num_bytes|num_chars|numerator|pack|parse_date|parse_datetime|parse_decimal|parse_float|parse_int|parse_int128|parse_json|parse_json_general|parse_jsonlines|parse_jsonlines_general|parse_uuid|pattern_match|percentile|percentile_nearest|period_add|period_day_to_int|period_max|period_min|pi_float64|pivot|pop_standard_deviation|pop_stddev|pop_variance|pop_zscore_normalization|power|prefix_join|product|proper_subset|proper_superset|rad2deg|random_mersenne_twister|random_threefry_float64|random_threefry_uint64|random_uint128|random_uint64|range|rational|rational_convert|regex_compile|regex_match|regex_match_all|relname_string|remainder|reverse_sort|right_override|rmse|round|round_mode|sample_standard_deviation|sample_stddev|sample_variance|sample_zscore_normalization|second|sign|sin|sinh|sort|soundex|spread|sqrt|squared|squared_deviation|starts_with|string|string_join|string_length|string_replace|string_replace_multiple|string_split|string_trim|subset|substring|substring_bytes|subtract|suffix_join|sum|sum_int|superset|tan|tanh|top|total|transpose|trunc|trunc_divide|trunc_to_int|uint|uint128|uint128_hash_value_convert|uint128_uint64_truncate|uint64|union|unit_normalization|unix_epoch|unpack|uppercase|uuid_string|weighted_mean|zip|Σ)\\b"
     },
     "types": {
       "patterns": [
         {
           "name": "entity.name.type.rel",
-          "match": "(\\b(Symbol|Char|Bool|Rational|FixedDecimal|Float16|Float32|Float64|Int8|Int16|Int32|Int64|Int128|UInt8|UInt16|UInt32|UInt64|UInt128|Date|DateTime|Day|Week|Month|Year|Nanosecond|Microsecond|Millisecond|Second|Minute|Hour|FilePos|HashValue|AutoNumberValue)\\b)"
+          "match": "\\b(Any|Char|String|Bool|Rational|FixedDecimal|Float|Float16|Float32|Float64|Int|Int8|Int16|Int32|Int64|Int128|UInt8|UInt16|UInt32|UInt64|UInt128|Date|Bottom|Char|DateTime|FilePos|Missing|Year|Month|Week|Day|Hour|Minute|Second|Millisecond|Microsecond|Nanosecond|SHA1|UUID|FixedDecimal|Number|Pattern|Floating|UnsignedInt|SignedInt|Rational|RelName|Entity|AutoNumber|Hash)\\b"
         }
       ]
     },
@@ -222,7 +119,137 @@
           "match": "(\\b(true|false)\\b)"
         }
       ]
+    },
+    "special-relations": {
+      "patterns": [
+        {
+          "name": "entity.other",
+          "match": "(\\b(insert|delete|output|abort|export)\\b)"
+        }
+      ]
+    },
+    "symbols": {
+      "patterns": [
+        {
+          "name": "variable.parameter.rel",
+          "match": ":[_$[:alpha:]]([_$[:alnum:]]*)"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.rel",
+      "patterns": [
+        {
+          "include": "#plain-strings"
+        },
+        {
+          "include": "#multiline-strings"
+        },
+        {
+          "include": "#raw-strings"
+        }
+      ],
+      "repository": {
+        "plain-strings": {
+          "name": "string.quoted.double.rel",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.rel",
+              "match": "\\\\."
+            },
+            {
+              "include": "#string_percent_sign_interpolate"
+            }
+          ]
+        },
+        "multiline-strings": {
+          "name": "string.quoted.triple.rel",
+          "begin": "\"\"\"",
+          "end": "\"\"\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape",
+              "match": "\\\\."
+            }
+          ]
+        },
+        "raw-strings": {
+          "patterns": [
+            {
+              "name": "string.quote.raw",
+              "begin": "raw((?:\"{2})*\")",
+              "end": "\\1"
+            }
+          ]
+        },
+        "string_percent_sign_interpolate": {
+          "name": "string.quoted.rel",
+          "patterns": [
+            {
+              "begin": "%\\(",
+              "end": "\\)",
+              "name": "variable.interpolation.rel",
+              "patterns": [
+                {
+                  "include": "$self"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "characters": {
+      "name": "string.quoted.single.rel",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "name": "constant.character.escape.rel",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "numbers": {
+      "name": "constant.numeric.rel",
+      "patterns": [
+        {
+          "include": "#number-float"
+        },
+        {
+          "include": "#number-hex"
+        },
+        {
+          "include": "#number-oct"
+        },
+        {
+          "include": "#number-long"
+        }
+      ]
+    },
+    "number-float": {
+      "name": "constant.numeric.float.rel",
+      "match": "(?x)\n  (?<! \\w)(?:\n    (?:\n      \\.[0-9](?: _?[0-9] )*\n      |\n      [0-9](?: _?[0-9] )* \\. [0-9](?: _?[0-9] )*\n      |\n      [0-9](?: _?[0-9] )* \\.\n    ) (?: [eE][+-]?[0-9](?: _?[0-9] )* )?\n    |\n    [0-9](?: _?[0-9] )* (?: [eE][+-]?[0-9](?: _?[0-9] )* )\n  )(?!\\w|\\.)"
+    },    
+    "number-hex": {
+      "name": "constant.numeric.hex.rel",
+      "match": "(?x)\n  (?<![\\w\\.])\n    (0[xX]) (_?[0-9a-fA-F])+\n  \\b\n",
+      "captures": {
+        "1": {
+          "name": "storage.type.number.rel"
+        }
+      }
+    },
+    "number-oct": {
+      "name": "constant.numeric.oct.rel",
+      "match": "(?x)\n  (?<![\\w\\.])\n    (0o) (_?[0-7])+\n  \\b\n",
+      "captures": {
+        "1": {
+          "name": "storage.type.number.rel"
+        }
+      }
     }
-  },
-  "scopeName": "source.rel"
+  }
 }
