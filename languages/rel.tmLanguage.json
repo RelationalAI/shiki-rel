@@ -87,7 +87,7 @@
     "annotations": {
       "patterns": [
         {
-          "name": "support.function.annotation.rel",
+          "name": "entity.other.attribute-name.rel",
           "match": "\\s*(@outline)\\s*|\\s*(@inline)\\s*|\\s*(@ondemand)\\s*|\\s*(@function)\\s*|\\s*(@static)|=\\s*"
         }
       ]
@@ -123,7 +123,7 @@
     "special-relations": {
       "patterns": [
         {
-          "name": "entity.other",
+          "name": "entity.name.tag",
           "match": "(\\b(insert|delete|output|abort|export)\\b)"
         }
       ]
